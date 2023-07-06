@@ -1,0 +1,6 @@
+@import "/markdown.css";
+
+.markdown-body{
+  padding: 80px;
+  background: #121212;
+}

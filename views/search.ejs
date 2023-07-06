@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../components/head"); %>
+    <link rel="stylesheet" href="/search.css">
+  </head>
+  <body>
+    <h1>Search Results</h1>
+    <div class="results">
+      <% results.forEach(function (r){ %>
+        <a href="<%= r.link %>">
+          <div class="result">
+            <h3><%= r.name %></h3>
+            <p>
+              ...
+              <br>
+              <%= r.line %>
+              <br>
+              ...
+            </p>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </body>
+</html>

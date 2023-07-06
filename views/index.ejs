@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../components/head"); %>
+    <link rel="stylesheet" href="/index.css">
+  </head>
+  <body>
+    <form action="/search" method="GET">
+      <h1>Note Server</h1>
+      <div class="main">
+        <input type="text" name="term" placeholder="Search for notes...">
+        <select name="type" required>
+          <option value="" disabled selected>Search In</option>
+          <option value="header">Header</option>
+          <option value="dir">Directory</option>
+          <option value="content">Content</option>
+        </select>
+      </div>
+      <button>Search</button>
+    </form>
+    <footer>
+      <label>Note Server v<%= version %> | <a href="https://github.com/ngn13/note-server">Github</a></label>
+    </footer>
+  </body>
+</html>
