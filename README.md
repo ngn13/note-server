@@ -49,5 +49,7 @@ Then you can add pm2 to startup by running:
 pm2 startup
 ```
 
+<br>
+
 # 🔗 Credit
 > [github-markdown-css](https://github.com/sindresorhus/github-markdown-css) - Used for markdown rendering
