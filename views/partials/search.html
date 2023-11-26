@@ -1,0 +1,11 @@
+<div class="search">
+  <form method="get" action="/search" class="search-inner">
+    <h3></h3>
+    {% if search %}
+      <input name="s" type="text" placeholder="What are you looking for?" value="{{search}}" autofocus>
+    {% else %}
+      <input name="s" type="text" placeholder="What are you looking for?">
+    {% endif %}
+    <input type="submit" style="display: none;"/>
+  </form>
+</div>

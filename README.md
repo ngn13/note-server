@@ -1,55 +1,62 @@
 <p align="center">
-  <img src="images/web.png" width="900px">
+  <img src="images/index.png" width="400px">
+  <img src="images/note.png" width="400px">
 </p>
-<h1 align="center">Note Server 📝 A simple web server to host your notes</h1>
+<h1 align="center">Note Server 📝 Host your markdown notes</h1>
 <h3 align="center">
-  Just a simple web server that you can use to host/search
-  your markdown notes - written in nodejs!
+  Just a web server that you can use to host
+  your markdown notes - written in Go!
 </h3>
 
 <p align="center">
-  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/ngn13/note-server?style=for-the-badge">
-  <img alt="GitHub last commit (branch)" src="https://img.shields.io/github/last-commit/ngn13/note-server/main?style=for-the-badge">
-  <img alt="Static Badge" src="https://img.shields.io/badge/express-built%20with?style=for-the-badge&label=built%20with">
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/ngn13/note-server?style=for-the-badge">
+    <img alt="GitHub License" src="https://img.shields.io/github/license/ngn13/note-server?style=for-the-badge">
+    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/ngn13/note-server?style=for-the-badge">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ngn13/note-server?style=for-the-badge">
+    <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/ngn13/note-server?style=for-the-badge">
 </p>
 
-<br>
+</br>
+
+# ✨ Features
+- Minimal dark UI with zero javascript 
+- Content and path based searching 
+- Modification time based sorting
+- Image and link support 
+
+</br>
 
 # 😋 Setup
-### Install `npm` and `nodejs` first!
-To install note server:
+### with Docker 
 ```bash
 git clone https://github.com/ngn13/note-server.git
-cd note-server
-npm i
-```
-Then make a directory named `notes` and place all your notes
-in there, you can have subdirs, just make sure your notes are 
-in **markdown format**! 
-On startup note server will create routes for each of your notes.
-To start the server:
-```
-npm run start
-```
-This will start the note server on port 8082, you can change the port by
-editing [config.json](config.json)
+cd note-server && docker build --tag note-server .
 
-<br>
+# bring in your notes, for example:
+git clone https://github.com/your/cool-notes.git
+mv cool-notes notes
 
-# 👀 Autostart with PM2
-You can install PM2 and use it with note server to start the server
-on boot, to do this run the following commands in note-server directory
-```bash
-npm i pm2 -g
-pm2 start index.js
+docker run -d -v $PWD/notes:/app/notes   \
+              -p 80:8080                 \
+              --name my-notes            \
+              note-server
 ```
-Then you can add pm2 to startup by running:
-```bash
-pm2 startup
-```
+Now you can connect to note server on port 80, you can 
+extend this setup with a reverse proxy if you wish.
 
-<br>
+</br>
+
+# 🔄 Auto-updating your notes 
+If you are using git for your notes, then you can 
+setup a cronjob to auto-update your notes.
+
+To do this add this enrty to your `/etc/crontab`:
+```
+  0  *  * * *   your-username     cd /path/to/note-sever/notes && /usr/bin/git pull 
+```
+This entry will pull and sync your notes with the remote every hour
+
+</br>
 
 # 🔗 Credit
 > [github-markdown-css](https://github.com/sindresorhus/github-markdown-css) - Used for markdown rendering
+> [nerdfonts](https://github.com/ryanoasis/nerd-fonts) - Fonts used in the application 
