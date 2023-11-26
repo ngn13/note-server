@@ -11,21 +11,16 @@
 <p align="center">
     <img alt="GitHub License" src="https://img.shields.io/github/license/ngn13/note-server?style=for-the-badge">
     <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/ngn13/note-server?style=for-the-badge">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ngn13/note-server?style=for-the-badge">
     <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/ngn13/note-server?style=for-the-badge">
 </p>
 
-</br>
-
-# ✨ Features
+## ✨ Features
 - Minimal dark UI with zero javascript 
 - Content and path based searching 
 - Modification time based sorting
 - Image and link support 
 
-</br>
-
-# 😋 Setup
+## 😋 Setup
 ### with Docker 
 ```bash
 git clone https://github.com/ngn13/note-server.git
@@ -43,9 +38,7 @@ docker run -d -v $PWD/notes:/app/notes   \
 Now you can connect to note server on port 80, you can 
 extend this setup with a reverse proxy if you wish.
 
-</br>
-
-# 🔄 Auto-updating your notes 
+## 🔄 Auto-updating your notes 
 If you are using git for your notes, then you can 
 setup a cronjob to auto-update your notes.
 
@@ -55,8 +48,7 @@ To do this add this enrty to your `/etc/crontab`:
 ```
 This entry will pull and sync your notes with the remote every hour
 
-</br>
-
-# 🔗 Credit
+## 🔗 Credit
 > [github-markdown-css](https://github.com/sindresorhus/github-markdown-css) - Used for markdown rendering
+
 > [nerdfonts](https://github.com/ryanoasis/nerd-fonts) - Fonts used in the application 
