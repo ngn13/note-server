@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "partials/head.html" %}
+    <link href="/note.css" rel="stylesheet"> 
+    <link href="/markdown.css" rel="stylesheet"> 
+    <title>Note Server | {{path}}</title>
+  </head>
+  <body>
+    {% include "partials/search.html" %}
+    <div class="note"> 
+      <div class="note-inner"> 
+        <div class="markdown-body"> 
+          {{markdown | safe}}
+        </div> 
+      </div>
+    </div>
+  </body>
+</html>
+

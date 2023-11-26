@@ -1,6 +1,15 @@
-@import "/markdown.css";
+.note{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 
-.markdown-body{
-  padding: 80px;
-  background: #121212;
+.note-inner {
+  width: 80%;
+  background: var(--background-second);
+  color: var(--text-main);
+  padding: 40px;
+  border-radius: var(--radius);
+  margin-bottom: 30px;
 }

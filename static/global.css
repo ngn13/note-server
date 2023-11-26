@@ -1,12 +1,64 @@
+:root {
+  --background-main: black;
+  --background-second: #101010;
+  --background-third: #202020;
+  --border-main: #909090;
+  --text-main: #f0f0f0;
+  --radius: 7px;
+}
+
+@font-face {
+  font-family: SpaceMono;
+  src: url("/SpaceMonoNF.ttf");
+}
+
 *{
   padding: 0;
   margin: 0;
-  font-family: 'Helvetica', sans-serif;
+  font-family: SpaceMono;
 }
 
 body{
-  background: #121212;
+  background: var(--background-main);
 }
 
+::selection {
+  background: var(--background-third);
+  text-decoration: underline;
+}
 
+.search {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
+.search-inner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--border-main);
+  border-radius: var(--radius);
+  width: 50%;
+}
+
+.search-inner input {
+  background: none;
+  color: var(--text-main);
+  width: 100%; 
+  border: none;
+  outline: none;
+  font-size: 20px;
+  text-align: right;
+  padding-right: 15px;
+}
+
+.search-inner h3 {
+  font-size: 30px;
+  color: var(--text-main);
+  margin-right: 15px;
+  margin-left: 15px;
+}
