@@ -23,9 +23,6 @@
 ## 😋 Setup
 ### with Docker 
 ```bash
-git clone https://github.com/ngn13/note-server.git
-cd note-server && docker build --tag note-server .
-
 # bring in your notes, for example:
 git clone https://github.com/your/cool-notes.git
 mv cool-notes notes
@@ -33,7 +30,7 @@ mv cool-notes notes
 docker run -d -v $PWD/notes:/app/notes   \
               -p 80:8080                 \
               --name my-notes            \
-              note-server
+              ghcr.io/ngn13/note-server 
 ```
 Now you can connect to note server on port 80, you can 
 extend this setup with a reverse proxy if you wish.

@@ -16,6 +16,7 @@ func main(){
 
   engine := django.New("./views", ".html")
   app := fiber.New(fiber.Config{
+    DisableStartupMessage: true,
     Views: engine,
   })
 
