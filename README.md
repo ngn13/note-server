@@ -46,6 +46,5 @@ To do this add this enrty to your `/etc/crontab`:
 This entry will pull and sync your notes with the remote every hour
 
 ## 🔗 Credit
-> [github-markdown-css](https://github.com/sindresorhus/github-markdown-css) - Used for markdown rendering
-
-> [nerdfonts](https://github.com/ryanoasis/nerd-fonts) - Fonts used in the application 
+- [github-markdown-css](https://github.com/sindresorhus/github-markdown-css): Used for markdown rendering
+- [nerdfonts](https://github.com/ryanoasis/nerd-fonts): Fonts used in the application 
