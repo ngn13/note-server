@@ -10,7 +10,7 @@
 
 <p align="center">
     <img alt="GitHub License" src="https://img.shields.io/github/license/ngn13/note-server?style=for-the-badge">
-    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/ngn13/note-server?style=for-the-badge">
+    <img alt="GitHub actions" src="https://img.shields.io/github/actions/workflow/status/ngn13/note-server/publish.yml?style=for-the-badge">
     <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/ngn13/note-server?style=for-the-badge">
 </p>
 
