@@ -1,4 +1,4 @@
-FROM golang:1.21.4
+FROM golang:1.21.4 as build
 
 WORKDIR /app
 
@@ -10,6 +10,11 @@ COPY static ./static
 COPY views ./views
 COPY routes ./routes
 
-RUN go build . 
+EXPOSE 8080
+RUN CGO_ENABLED=0 go build .
 
+FROM alpine as main
+COPY --from=build /app /app
+
+WORKDIR /app
 ENTRYPOINT ["/app/note-server"]
