@@ -38,7 +38,7 @@ func GET_Search(c *fiber.Ctx) error {
 	}
 
 	for i, n := range notes {
-		if strings.Contains(n.Path, search) {
+		if strings.Contains(n.Name, search) {
 			results = append(results, n)
 			indexes = append(indexes, i)
 		}

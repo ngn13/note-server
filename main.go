@@ -16,9 +16,7 @@ func main() {
 		opt_staticdir *string
 		opt_viewsdir  *string
 		opt_notesdir  *string
-
-		notes []lib.Note
-		err   error
+		err           error
 	)
 
 	opt_interface = flag.String("interface", "127.0.0.1:8080", "Web server interface in host:port format")
@@ -52,11 +50,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	if notes, err = lib.GetNotes(*opt_notesdir); err != nil {
-		lib.Fail("cannot obtain notes: %s", err.Error())
-		os.Exit(1)
-	}
-
 	engine := django.New(*opt_viewsdir, ".html")
 
 	app := fiber.New(fiber.Config{
@@ -65,6 +58,15 @@ func main() {
 	})
 
 	app.All("*", func(c *fiber.Ctx) error {
+		var notes []lib.Note
+
+		if notes, err = lib.GetNotes(*opt_notesdir); err != nil {
+			lib.Fail("cannot obtain notes: %s", err.Error())
+			return c.Status(404).Render("error", fiber.Map{
+				"message": "500 Internal Server Error",
+			})
+		}
+
 		c.Locals("notes", notes)
 		c.Locals("dir", *opt_notesdir)
 		return c.Next()

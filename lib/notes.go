@@ -2,6 +2,7 @@ package lib
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"sort"
@@ -11,28 +12,39 @@ import (
 
 type Note struct {
 	Sum      string
-	Path     string
+	Name     string
 	Fullpath string
 	Created  time.Time
 }
 
-func (n *Note) Load() error {
+func (n *Note) Load(dir string) error {
 	var (
 		err     error
 		content []byte
-		fp      string
+		file    *os.File
+		size    int
 	)
 
-	if fp = n.Fullpath; fp == "" {
-		fp = n.Path
+	if n.Name = strings.TrimPrefix(n.Fullpath, dir); n.Name[0] == '/' {
+		n.Name = n.Name[1:]
 	}
 
-	if content, err = os.ReadFile(fp); err != nil {
-		Warn("failed to read \"%s\" loading the note: %s", fp, err.Error())
+	content = make([]byte, 200)
+
+	if file, err = os.Open(n.Fullpath); err != nil {
+		return err
+	}
+	defer file.Close()
+
+	if size, err = io.ReadFull(file, content); err != nil && err != io.ErrUnexpectedEOF {
 		return err
 	}
 
-	n.Sum = getSum(content)
+	if size == 200 {
+		content = append(content, []byte("...")...)
+	}
+
+	n.Sum = string(content)
 	return nil
 }
 
@@ -40,41 +52,21 @@ func (n *Note) Read() ([]byte, error) {
 	var (
 		content []byte
 		err     error
-		fp      string
 	)
 
-	if fp = n.Fullpath; fp == "" {
-		fp = n.Path
-	}
-
-	if content, err = os.ReadFile(fp); err != nil {
-		Fail("failed to read \"%s\" loading the note: %s", fp, err.Error())
+	if content, err = os.ReadFile(n.Fullpath); err != nil {
 		return nil, err
 	}
 
 	return content, nil
 }
 
-func (n *Note) SetFp(dir string) error {
-	if n.Path == "" {
-		return fmt.Errorf("note path is not set")
-	}
-
-	n.Fullpath = path.Join(dir, n.Path)
-	return nil
-}
-
 func GetNotes(dir string) ([]Note, error) {
 	var (
-		err    error
-		st     os.FileInfo
-		all    []Note
-		curdir string
+		err error
+		st  os.FileInfo
+		all []Note
 	)
-
-	if curdir, err = os.Getwd(); err != nil {
-		return nil, fmt.Errorf("failed to get the working directory: %s", err.Error())
-	}
 
 	if st, err = os.Stat(dir); err != nil {
 		return nil, fmt.Errorf("failed to access notes path: %s", dir)
@@ -84,24 +76,16 @@ func GetNotes(dir string) ([]Note, error) {
 		return nil, fmt.Errorf("notes path is not a directory: %s", dir)
 	}
 
-	if err = os.Chdir(dir); err != nil {
-		return nil, fmt.Errorf("failed to change directory to \"%s\": %s", dir, err.Error())
-	}
-
-	all = findNotes(".")
+	all = findNotes(dir)
 
 	sort.Slice(all, func(i, j int) bool {
 		return all[i].Created.After(all[j].Created)
 	})
 
 	for i := range all {
-		if err = all[i].SetFp(dir); err != nil {
-			return nil, fmt.Errorf("failed to set the path for note: %s", err.Error())
+		if err = all[i].Load(dir); err != nil {
+			return nil, fmt.Errorf("failed to load the note \"%s\": %s", all[i].Name, err.Error())
 		}
-	}
-
-	if err = os.Chdir(curdir); err != nil {
-		return nil, fmt.Errorf("failed to change directory back to \"%s\": %s", curdir, err.Error())
 	}
 
 	return all, nil
@@ -139,13 +123,8 @@ func findNotes(dir string) []Note {
 		}
 
 		note = Note{
-			Path:     path.Clean(fp),
+			Fullpath: path.Clean(fp),
 			Created:  st.ModTime(),
-			Fullpath: "",
-		}
-
-		if note.Load() != nil {
-			continue
 		}
 
 		result = append(result, note)

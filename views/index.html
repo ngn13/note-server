@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     {% include "partials/head.html" %}
-    <link href="/index.css" rel="stylesheet"> 
+    <link href="/index.css" rel="stylesheet">
     {% if search %}
       <title>Note Server | {{search}}</title>
     {% else %}
@@ -14,7 +14,7 @@
     <div class="notes">
       {% for note in notes %}
         <div class="note">
-          <h1><a href="{{note.Path}}">{{note.Path}}</a></h1> 
+          <h1><a href="{{note.Name}}">{{note.Name}}</a></h1>
           <p>{{note.Sum}}</p>
         </div>
       {% endfor %}

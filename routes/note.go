@@ -54,7 +54,7 @@ func GET_note(c *fiber.Ctx) error {
 	fp = path.Clean(fp)
 
 	for _, n := range notes {
-		if n.Path != fp {
+		if n.Name != fp {
 			continue
 		}
 
