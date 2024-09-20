@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
   margin-bottom: 30px;
   gap: 30px;
 }
@@ -11,16 +10,19 @@
 .note {
   width: 60%;
   border: solid 1px var(--border-main); 
-  padding: 30px;
   border-radius: var(--radius);
+  padding: 25px;
 }
 
 .note h1 {
+  font-size: 2em;
   text-decoration: underline;
+  font-weight: 900;
+  margin-bottom: 10px;
 }
 
 .note p {
-  font-size: 20px;
+  font-size: 1.6em;
   color: var(--text-main);
 }
 

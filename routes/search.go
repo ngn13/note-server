@@ -1,55 +1,61 @@
 package routes
 
 import (
+	"bytes"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/microcosm-cc/bluemonday"
 	"github.com/ngn13/note-server/lib"
 )
 
 func contains(s []int, e int) bool {
-  for _, a := range s { 
-    if a == e {
-      return true 
-    }
-  }
-  return false
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
 
-func GetSearch(c *fiber.Ctx) error {
-  search := c.Query("s")
-  all := lib.GetNotes()
+func GET_Search(c *fiber.Ctx) error {
+	var (
+		search  string
+		content []byte
+		notes   []lib.Note
+		results []lib.Note
+		indexes []int
+		err     error
+	)
 
-  // no you aint getting any xss
-  s := bluemonday.UGCPolicy()
-  search = s.Sanitize(search)
+	search = lib.XSS_sanitizer.Sanitize(c.Query("s"))
+	notes = c.Locals("notes").([]lib.Note)
 
-  if search == "" {
-    return c.Render("index", fiber.Map{
-      "search": search,
-      "notes": all, 
-    })
-  }
+	if search == "" {
+		return c.Render("index", fiber.Map{
+			"search": search,
+			"notes":  notes,
+		})
+	}
 
-  var results []lib.Note
-  var indxs []int
+	for i, n := range notes {
+		if strings.Contains(n.Path, search) {
+			results = append(results, n)
+			indexes = append(indexes, i)
+		}
+	}
 
-  for i, n := range all {
-    if strings.Contains(n.Path, search) {
-      indxs = append(indxs, i)
-      results = append(results, n) 
-    }
-  }
+	for i, n := range notes {
+		if content, err = n.Read(); err != nil {
+			lib.Fail("failed to read the note \"%s\" during search: %s", err.Error())
+		}
 
-  for i, n := range all {
-    if !contains(indxs, i) && strings.Contains(n.Content, search) {
-      results = append(results, n) 
-    }
-  }
+		if !contains(indexes, i) && bytes.Contains(content, []byte(search)) {
+			results = append(results, n)
+		}
+	}
 
-  return c.Render("index", fiber.Map{
-    "search": search,
-    "notes": results, 
-  })
+	return c.Render("index", fiber.Map{
+		"search": search,
+		"notes":  results,
+	})
 }

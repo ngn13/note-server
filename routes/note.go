@@ -1,73 +1,84 @@
 package routes
 
 import (
-	"os"
 	"path"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
-	"github.com/microcosm-cc/bluemonday"
 	"github.com/ngn13/note-server/lib"
 	"github.com/russross/blackfriday/v2"
 )
 
-func Ret404(c *fiber.Ctx) error {
-  return c.Status(404).Render("error", fiber.Map{
-    "message": "404 Not Found",
-  }) 
-}
+func GET_note(c *fiber.Ctx) error {
+	var (
+		notes   []lib.Note
+		content []byte
+		name    string
+		dir     string
+		fp      string
+		op      string
+		err     error
+	)
 
-func GetNote(c *fiber.Ctx) error {
-  pth := c.Path()
-  
-  // no you aint getting any lfi 
-  bad := []string{"..", "\\"} 
-  for _, b := range bad {
-    if strings.Contains(pth, b) {
-      return Ret404(c)
-    }
-  }
+	notes = c.Locals("notes").([]lib.Note)
+	dir = c.Locals("dir").(string)
 
-  if pth == "/" {
-    return Ret404(c)
-  }
+	fp = c.Path()
+	if fp[0] == '/' {
+		fp = fp[1:]
+	}
 
-  if !strings.HasSuffix(pth, ".md") {
-    _, f := path.Split(pth)
-    fpth := lib.FindFile(f) 
-    if fpth == "" {
-      return Ret404(c)
-    }
+	op = lib.XSS_sanitizer.Sanitize(fp)
 
-    return c.SendFile(fpth)
-  }
+	for _, f := range lib.LFI_filters {
+		if strings.Contains(fp, f) {
+			return GET_NotFound(c)
+		}
+	}
 
-  s := bluemonday.UGCPolicy()
-  pth = s.Sanitize(pth)
+	if fp == "/" {
+		return GET_NotFound(c)
+	}
 
-  fp := path.Join("notes", pth)
-  content, err := os.ReadFile(fp)
-  if err != nil && os.IsNotExist(err) {
-    return Ret404(c)
-  }else if err != nil {
-    log.Warnf("Cannot read file: %s", fp)
-    return c.Status(500).Render("error", fiber.Map{
-      "message": "500 Server Error",
-    }) 
-  }
+	if !strings.HasSuffix(fp, ".md") {
+		_, name = path.Split(fp)
 
-  ext := blackfriday.FencedCode
-  ext |= blackfriday.SpaceHeadings
-  ext |= blackfriday.HardLineBreak
+		if fp = lib.FindFile(name, dir); fp == "" {
+			lib.Fail("requested file \"%s\" not found", name)
+			return GET_NotFound(c)
+		}
 
-  md := blackfriday.Run(
-    content, 
-    blackfriday.WithExtensions(ext),
-  )
+		return c.SendFile(fp)
+	}
 
-  return c.Render("note", fiber.Map{
-    "path": pth,
-    "markdown": string(md), 
-  })
+	fp = path.Clean(fp)
+
+	for _, n := range notes {
+		if n.Path != fp {
+			continue
+		}
+
+		if content, err = n.Read(); err != nil {
+			return c.Status(404).Render("error", fiber.Map{
+				"message": "500 Internal Server Error",
+			})
+		}
+
+		ext := blackfriday.FencedCode
+		ext |= blackfriday.SpaceHeadings
+		ext |= blackfriday.NoEmptyLineBeforeBlock
+
+		md := blackfriday.Run(
+			content,
+			blackfriday.WithExtensions(ext),
+		)
+
+		return c.Render("note", fiber.Map{
+			"path":     op,
+			"markdown": string(md),
+		})
+	}
+
+	lib.Fail("requested note \"%s\" not found", fp)
+	return GET_NotFound(c)
 }

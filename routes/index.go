@@ -5,18 +5,16 @@ import (
 	"github.com/ngn13/note-server/lib"
 )
 
-func GetIndex(c *fiber.Ctx) error {
-  var first []lib.Note 
-  all := lib.GetNotes()
+func GET_Index(c *fiber.Ctx) error {
+	notes := c.Locals("notes").([]lib.Note)
 
-  for _, n := range all {
-    if (len(first) == 20) {
-      break
-    }
-    first = append(first, n)
-  }
+	if len(notes) > 20 {
+		return c.Render("index", fiber.Map{
+			"notes": notes[:20],
+		})
+	}
 
-  return c.Render("index", fiber.Map{
-    "notes": first, 
-  })
+	return c.Render("index", fiber.Map{
+		"notes": notes,
+	})
 }

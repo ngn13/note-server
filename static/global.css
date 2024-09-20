@@ -1,21 +1,20 @@
 :root {
   --background-main: black;
   --background-second: #101010;
-  --background-third: #202020;
-  --border-main: #909090;
-  --text-main: #f0f0f0;
-  --radius: 7px;
-}
+  --background-third: #505050;
 
-@font-face {
-  font-family: SpaceMono;
-  src: url("/SpaceMonoNF.ttf");
+  --text-main: #f0f0f0;
+  --text-second: #8a8a8a;
+  --text-third: #454545;
+
+  --border-main: #909090;
+  --radius: 7px;
 }
 
 *{
   padding: 0;
   margin: 0;
-  font-family: SpaceMono;
+  font-family: monospace;
 }
 
 body{
@@ -42,6 +41,7 @@ body{
   align-items: center;
   border: 1px solid var(--border-main);
   border-radius: var(--radius);
+  padding: 4px 0 4px 0;
   width: 50%;
 }
 
@@ -57,8 +57,9 @@ body{
 }
 
 .search-inner h3 {
-  font-size: 30px;
+  font-size: 20px;
+  padding: 5px;
   color: var(--text-main);
-  margin-right: 15px;
-  margin-left: 15px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
