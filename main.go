@@ -70,7 +70,7 @@ func main() {
 		return c.Next()
 	})
 
-	app.Static("/", "./static")
+	app.Static("/", *opt_staticdir)
 
 	app.Get("/", routes.GET_Index)
 	app.Get("/search", routes.GET_Search)

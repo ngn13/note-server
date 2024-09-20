@@ -9,7 +9,7 @@
   width: 80%;
   background: var(--background-second);
   color: var(--text-main);
-  padding: 30px;
+  padding: 25px 30px;
   border-radius: var(--radius);
   margin-bottom: 30px;
 }

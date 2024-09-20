@@ -5,9 +5,12 @@ note-server: $(SRCS)
 	go build
 
 install:
-	install -Dm755 note-server $(DESTDIR)/$(PREFIX)/bin/note-server
-	install -dm655 static $(DESTDIR)/$(PREFIX)/lib/note-server/static
-	install -dm655 views $(DESTDIR)/$(PREFIX)/lib/note-server/views
+	install -dm755 $(DESTDIR)/$(PREFIX)/bin/note-server
+	install -dm755 $(DESTDIR)/$(PREFIX)/lib/note-server/static
+	install -dm755 $(DESTDIR)/$(PREFIX)/lib/note-server/views
+	install -m755 note-server $(DESTDIR)/$(PREFIX)/bin/note-server
+	cp -r static/* $(DESTDIR)/$(PREFIX)/lib/note-server/static
+	cp -r views/*  $(DESTDIR)/$(PREFIX)/lib/note-server/views
 
 uninstall:
 	rm $(DESTDIR)/$(PREFIX)/bin/note-server
