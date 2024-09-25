@@ -5,7 +5,6 @@ note-server: $(SRCS)
 	go build
 
 install:
-	install -dm755 $(DESTDIR)/$(PREFIX)/bin/note-server
 	install -dm755 $(DESTDIR)/$(PREFIX)/lib/note-server/static
 	install -dm755 $(DESTDIR)/$(PREFIX)/lib/note-server/views
 	install -m755 note-server $(DESTDIR)/$(PREFIX)/bin/note-server
